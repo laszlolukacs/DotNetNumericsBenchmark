@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DotNetNumericsPerfTest
+namespace DotNetNumericsBenchmark
 {
     using System;
     using System.Collections.Generic;
@@ -16,6 +16,7 @@ namespace DotNetNumericsPerfTest
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using CommandLine;
 
     /// <summary>
     /// The main class of the program.
@@ -31,16 +32,16 @@ namespace DotNetNumericsPerfTest
             Console.WriteLine($"DotNetNumericsPerfTest {typeof(Options).Assembly.GetName().Version}");
 
             var iterations = 10000000;
-            var options = new Options();
-            if (CommandLine.Parser.Default.ParseArguments(args, options))
-            {
-                iterations = options.Iterations;
-            }
-            else
-            {
-                // after the help is displayed, exit the application
-                Environment.Exit(0);
-            }
+            _ = Parser.Default.ParseArguments<Options>(args)
+                .WithParsed(options =>
+                {
+                    iterations = options.Iterations;
+                })
+                .WithNotParsed(a =>
+                {
+                    // after the help is displayed, exit the application
+                    Environment.Exit(0);
+                });
 
             string processorName = "Unknown CPU", clockSpeed = "unknown";
             using (ManagementObjectSearcher win32Processor = new ManagementObjectSearcher("select * from Win32_Processor"))
