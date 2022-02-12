@@ -5,11 +5,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
 
 namespace DotNetNumericsBenchmark
 {
-    [SimpleJob(RuntimeMoniker.NetCoreApp31)]
+    [SimpleJob]
     public class ScalarVsSimdArrayAverageBenchmark
     {
         private readonly double[] arrayA;
